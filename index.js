@@ -4,7 +4,7 @@ const puppeteer = require("puppeteer");
 (async () => {
     const browser = await puppeteer.launch({
         headless : false,
-
+        
     });
     const page = await browser.newPage();
     await page.goto("https://in.linkedin.com/");
@@ -20,20 +20,19 @@ const puppeteer = require("puppeteer");
 
     await  page.click('#search-reusables__filters-bar li:nth-child(2) button');
     
-    Array.from(document.querySelectorAll('.reusable-search__result-container')).map((e) => {
-        return {
-            "name": e.querySelector('.entity-result__title-text .app-aware-link [aria-hidden="true"]').innerText,
-            "title": e.querySelector('.linked-area [class*="primary"]').innerText,
-            "location": e.querySelector('.linked-area [class*="secondary"]').innerText,
-            
-        }
-        console.log();
-    });
+    const grabtext = await page.evaluate(() => {
+        const text = Array.from(document.querySelectorAll('.reusable-search__result-container')).map( e => {
+            console.log(e);
 
-    
-   
+            return {
+                "name": e.querySelector('.entity-result__title-text .app-aware-link [aria-hidden="true"]').innerText,
+                "title": e.querySelector('.linked-area [class*="primary"]').innerText,
+                "location": e.querySelector('.linked-area [class*="secondary"]').innerText,
+            }
 
-   
+        });
 
+    }); 
+   console.log(grabtext);
 
     })();
